@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Three.js Hello World</title>
+    <title>Three.js 3D Text</title>
     <script src="https://cdn.jsdelivr.net/npm/three/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three/examples/js/geometries/TextGeometry.js"></script>
     <style>
         body { margin: 0; }
         canvas { display: block; }
@@ -22,24 +24,28 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Cube
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
+        // Font Loader
+        const loader = new THREE.FontLoader();
+        loader.load('https://cdn.jsdelivr.net/npm/three/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+            const textGeometry = new THREE.TextGeometry('HELLO WORLD', {
+                font: font,
+                size: 1,
+                height: 0.2
+            });
+
+            textGeometry.center();
+
+            const textMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+            scene.add(textMesh);
+        });
 
         // Animation Loop
         function animate() {
             requestAnimationFrame(animate);
-
-            // Rotation
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-
-            // Render
             renderer.render(scene, camera);
         }
-
         animate();
 
         // Handle window resize
